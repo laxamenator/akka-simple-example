@@ -7,7 +7,7 @@ object IntParser {
   case object Print
 
   def hexProps(printer: ActorRef): Props = Props(new IntParser(16, printer))
-  def decProps(printer: ActorRef): Props = Props(new IntParser(10, printer))
+  def octProps(printer: ActorRef): Props = Props(new IntParser(8, printer))
 }
 
 class IntParser(base: Int, printer: ActorRef) extends Actor {
@@ -46,19 +46,19 @@ object AkkaSimpleExample extends App {
   val system: ActorSystem = ActorSystem("simpleAkka")
   val printer: ActorRef = system.actorOf(Printer.props, "printerActor")
   val hexParser: ActorRef = system.actorOf(IntParser.hexProps(printer), "hexParser")
-  val decParser: ActorRef = system.actorOf(IntParser.decProps(printer), "decParser")
+  val octParser: ActorRef = system.actorOf(IntParser.octProps(printer), "octParser")
 
   hexParser ! Parse("FFFF")
   hexParser ! Print
 
-  decParser ! Parse("1001")
-  decParser ! Print
+  octParser ! Parse("1001")
+  octParser ! Print
 
   hexParser ! Parse("F")
   hexParser ! Print
 
-  decParser ! Parse("404")
-  decParser ! Print
+  octParser ! Parse("404")
+  octParser ! Print
 
   hexParser ! Parse("404")
   hexParser ! Print
